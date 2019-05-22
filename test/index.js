@@ -155,7 +155,9 @@ describe('create/update', function () {
       it('updates stack from json template file with CloudFormation parameters', function () {
         const getTemplateSummaryStub = AWS.mock('CloudFormation', 'getTemplateSummary', sinon.stub().callsArgWith(1, null, {
           Parameters: [
-            {ParameterKey: 'TableName'}
+            {ParameterKey: 'TableName'},
+            {ParameterKey: 'ClusterSize'},
+            {ParameterKey: 'NodeDiskSize'}
           ]
         }))
         var cfn = require('../')
@@ -163,7 +165,9 @@ describe('create/update', function () {
           name: 'test-stack-name',
           template: path.join(__dirname, '/templates/test-template-4.json'),
           cfParams: {
-            TableName: 'TestTable'
+            TableName: 'TestTable',
+            ClusterSize: 0,
+            NodeDiskSize: 20
           }
         })
           .then(function (data) {
@@ -175,6 +179,14 @@ describe('create/update', function () {
                 {
                   ParameterKey: 'TableName',
                   ParameterValue: 'TestTable'
+                },
+                {
+                  ParameterKey: 'ClusterSize',
+                  ParameterValue: '0'
+                },
+                {
+                  ParameterKey: 'NodeDiskSize',
+                  ParameterValue: '20'
                 }
               ]
             })

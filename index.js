@@ -281,10 +281,10 @@ function Cfn (name, template) {
         let templateParams = data.Parameters || []
         return templateParams.map(p => {
           let k = _.toLower(p.ParameterKey)
-          let v = params[k]
+          let v = params.hasOwnProperty(k) ? String(params[k]) : undefined
           return {
             ParameterKey: p.ParameterKey,
-            ParameterValue: v || p.DefaultValue
+            ParameterValue: v !== undefined ? v : p.DefaultValue
           }
         })
       })
